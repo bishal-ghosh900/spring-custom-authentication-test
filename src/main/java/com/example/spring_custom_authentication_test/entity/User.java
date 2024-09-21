@@ -1,5 +1,7 @@
 package com.example.spring_custom_authentication_test.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User implements UserDetails {
+@JsonIgnoreProperties(value = {"username", "authorities", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+public class User extends BaseEntity implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -28,8 +31,8 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "password")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
