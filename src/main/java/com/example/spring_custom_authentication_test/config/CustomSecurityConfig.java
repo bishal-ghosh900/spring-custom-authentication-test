@@ -10,21 +10,24 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-
 
 @Configuration
 @EnableWebSecurity
 public class CustomSecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
 
-    public CustomSecurityConfig(AuthenticationProvider authenticationProvider) {
+    public CustomSecurityConfig(
+            AuthenticationProvider authenticationProvider,
+            AuthenticationEntryPoint authenticationEntryPoint
+    ) {
         this.authenticationProvider = authenticationProvider;
-
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,6 +37,7 @@ public class CustomSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(authenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider)
                 .build();

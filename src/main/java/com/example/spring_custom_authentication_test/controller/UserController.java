@@ -1,7 +1,6 @@
 package com.example.spring_custom_authentication_test.controller;
 
 import com.example.spring_custom_authentication_test.entity.User;
-import com.example.spring_custom_authentication_test.repo.UserRepo;
 import com.example.spring_custom_authentication_test.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
